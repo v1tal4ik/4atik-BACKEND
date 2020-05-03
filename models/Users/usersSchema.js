@@ -26,6 +26,9 @@ const userSchema = new Schema(
       type: String,
       required: [true, 'Input salt'],
     },
+    refreshToken: {
+      type: String,
+    },
   },
   {
     versionKey: false,
@@ -33,6 +36,5 @@ const userSchema = new Schema(
 );
 
 const Users = mongoose.model('users', userSchema);
-console.log(Users.users);
 
 export default Users;

@@ -14,7 +14,7 @@ mongoose.connection.on('connected', () => {
   console.log('Mongoose connection open mongoDB by v1tal4ik');
 });
 
-mongoose.connection.on('error', err => {
+mongoose.connection.on('error', (err) => {
   console.log(`Mongoose connection error: ${err}`);
 });
 
