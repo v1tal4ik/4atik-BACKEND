@@ -14,7 +14,7 @@ app
   .use(cookieParser())
   .use(bodyParser.text())
   .use(bodyParser.json())
-  .use('/', Router);
+  .use('/1.0', Router);
 
 app.use((req, res) => {
   res.status(404).json({
