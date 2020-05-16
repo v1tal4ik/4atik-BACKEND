@@ -4,6 +4,15 @@ import { generateAccessToken, generateRefreshToken } from '../util/generateToken
 
 dotenv.config();
 
+const getDataById = async (req, res) => {
+  try {
+    const { id, email, name } = await db.getUserById({ id: req.query.id });
+    res.status(200).json({ status: true, user: { id, email, name } });
+  } catch (e) {
+    res.status(404).json({ status: false, msg: e.message });
+  }
+};
+
 const getDataByCredential = async (req, res) => {
   try {
     const user = await db.getUserByCredential(req.body);
@@ -46,7 +55,8 @@ const refreshTokens = async (req, res) => {
 };
 
 export default {
-  addNewUser,
+  getDataById,
   getDataByCredential,
+  addNewUser,
   refreshTokens,
 };
