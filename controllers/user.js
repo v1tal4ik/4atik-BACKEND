@@ -37,6 +37,15 @@ const addNewUser = async (req, res) => {
   }
 };
 
+const changePassword = async (req, res) => {
+  try {
+    const msg = await db.changePassword(req.body);
+    res.status(200).json({ status: true, msg });
+  } catch (e) {
+    res.status(400).json({ status: false, msg: e.message });
+  }
+};
+
 const refreshTokens = async (req, res) => {
   const { id, refreshToken } = req.body;
   try {
@@ -58,5 +67,6 @@ export default {
   getDataById,
   getDataByCredential,
   addNewUser,
+  changePassword,
   refreshTokens,
 };

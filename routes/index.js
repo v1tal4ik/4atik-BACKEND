@@ -4,13 +4,10 @@ import user from '../controllers/user';
 
 const router = express.Router();
 
-router.get('/users', checkTokensFunc, user.getDataById);
-router.post('/users/register', user.addNewUser);
-router.post('/users/login', user.getDataByCredential);
-
-router.post('/foo', checkTokensFunc, (req, res) => {
-  res.status(200).json();
-});
+router.get('/user', checkTokensFunc, user.getDataById);
+router.post('/user/register', user.addNewUser);
+router.post('/user/login', user.getDataByCredential);
+router.post('/password', user.changePassword);
 
 router.post('/secret', user.refreshTokens);
 

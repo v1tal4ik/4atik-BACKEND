@@ -48,6 +48,21 @@ const addNewUser = async ({ email, name, password }) => {
   }
 };
 
+const changePassword = async ({ id, oldPassword, newPassword }) => {
+  const doc = await Users.findOne({ id });
+  const oldHash = crypto.pbkdf2Sync(oldPassword, doc.salt, 1000, 512, 'sha512').toString('hex');
+
+  if (doc.password === oldHash) {
+    const newHash = crypto.pbkdf2Sync(newPassword, doc.salt, 1000, 512, 'sha512').toString('hex');
+    const updatedUser = await Users.findOneAndUpdate({ id }, { password: newHash }, { new: true });
+    if (updatedUser.id === id) {
+      return Promise.resolve('Password has been change successfull:)');
+    }
+    return Promise.reject(new Error('Oops, something went wrong'));
+  }
+  return Promise.reject(new Error('Old password is wrong:('));
+};
+
 const setRefreshToken = async ({ id, refreshToken }) => {
   try {
     const user = await Users.findOneAndUpdate({ id }, { refreshToken }, { new: true });
@@ -61,5 +76,6 @@ export default {
   getUserById,
   getUserByCredential,
   addNewUser,
+  changePassword,
   setRefreshToken,
 };
