@@ -32,7 +32,7 @@ const userSchema = new Schema(
   },
   {
     versionKey: false,
-  },
+  }
 );
 
 const Users = mongoose.model('users', userSchema);
