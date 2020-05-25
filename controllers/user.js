@@ -27,10 +27,10 @@ const getDataByCredential = async (req, res) => {
   }
 };
 
-const addNewUser = async (req, res) => {
+const createNewUser = async (req, res) => {
   const { email, name, password } = req.body;
   try {
-    const response = await db.addNewUser({ email, name, password });
+    const response = await db.createNewUser({ email, name, password });
     res.status(201).json(response);
   } catch (e) {
     res.status(400).json({ status: false, msg: e.message });
@@ -66,7 +66,7 @@ const refreshTokens = async (req, res) => {
 export default {
   getDataById,
   getDataByCredential,
-  addNewUser,
+  createNewUser,
   changePassword,
   refreshTokens,
 };

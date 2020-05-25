@@ -1,5 +1,4 @@
 import crypto from 'crypto';
-import uuidv4 from 'uuid/v4';
 import Users from './usersSchema';
 
 const getUserById = async ({ id }) => {
@@ -26,12 +25,10 @@ const getUserByCredential = async ({ email, password }) => {
   }
 };
 
-const addNewUser = async ({ email, name, password }) => {
-  const id = uuidv4();
+const createNewUser = async ({ email, name, password }) => {
   const salt = crypto.randomBytes(16).toString('hex');
   const hash = crypto.pbkdf2Sync(password, salt, 1000, 512, 'sha512').toString('hex');
   const user = new Users({
-    id,
     email,
     name,
     password: hash,
@@ -41,6 +38,8 @@ const addNewUser = async ({ email, name, password }) => {
   try {
     const doc = await user.save();
     if (doc.email === email) {
+      // set id the same as _id for frontend part
+      await Users.findByIdAndUpdate(doc._id, { id: doc._id });
       return Promise.resolve({ status: true });
     }
   } catch (e) {
@@ -75,7 +74,7 @@ const setRefreshToken = async ({ id, refreshToken }) => {
 export default {
   getUserById,
   getUserByCredential,
-  addNewUser,
+  createNewUser,
   changePassword,
   setRefreshToken,
 };

@@ -6,7 +6,6 @@ const userSchema = new Schema(
   {
     id: {
       type: String,
-      required: [true, 'Input id'],
       unique: true,
     },
     email: {

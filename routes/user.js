@@ -5,7 +5,7 @@ import user from '../controllers/user';
 const router = express.Router();
 
 router.get('/', checkTokensFunc, user.getDataById);
-router.post('/register', user.addNewUser);
+router.post('/register', user.createNewUser);
 router.post('/login', user.getDataByCredential);
 router.post('/password', user.changePassword);
 
