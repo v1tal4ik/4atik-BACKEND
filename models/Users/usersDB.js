@@ -37,13 +37,9 @@ const createNewUser = async ({ email, name, password }) => {
   });
   try {
     const doc = await user.save();
-    if (doc.email === email) {
-      // set id the same as _id for frontend part
-      await Users.findByIdAndUpdate(doc._id, { id: doc._id });
-      return Promise.resolve({ status: true });
-    }
+    return Promise.resolve(doc);
   } catch (e) {
-    return Promise.reject(new Error(`Opps, the registration ${name} was failed :(`));
+    return Promise.reject(e);
   }
 };
 

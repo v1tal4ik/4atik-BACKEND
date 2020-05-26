@@ -1,4 +1,5 @@
 import db from '../models/Dialog/dialogDB';
+import messagesDB from '../models/Message/messagesDB';
 
 const fetchDialogsByUserId = async (req, res) => {
   try {
@@ -11,10 +12,15 @@ const fetchDialogsByUserId = async (req, res) => {
 
 const createNewDialogByUserId = async (req, res) => {
   try {
-    const { author, partner, lastMessage } = req.body;
-    const data = await db.createNewDialogByUserId({ author, partner, lastMessage });
+    const { author, partner, text } = req.body;
+    const dialog = await db.createNewDialogByUserId({ author, partner });
+    await messagesDB.createMessageForDialog({
+      user: author,
+      dialogId: dialog._id,
+      text,
+    });
     // TODO think about what should return
-    res.status(200).json({ status: true, data });
+    res.status(200).json({ status: true, data: dialog });
   } catch (e) {
     res.status(400).json({ status: false, msg: e.message });
   }

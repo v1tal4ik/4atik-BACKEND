@@ -6,7 +6,9 @@ const userSchema = new Schema(
   {
     id: {
       type: String,
-      unique: true,
+      default: function () {
+        return this._id;
+      },
     },
     email: {
       type: String,

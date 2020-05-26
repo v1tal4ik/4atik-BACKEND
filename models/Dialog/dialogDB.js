@@ -1,29 +1,22 @@
-import { v4 as uuidv4 } from 'uuid';
 import Dialog from './dialogShema';
 
 const fetchDialogsByUserId = async ({ authorId }) => {
   try {
-    console.log(authorId);
-    const doc = await Dialog.find({ author: authorId }).populate(['author']);
-    console.log({ doc });
+    const doc = await Dialog.find()
+      .or([{ author: authorId }, { partner: authorId }])
+      .populate(['author', 'partner']);
     return Promise.resolve(doc);
   } catch (e) {
-    console.log(e);
-    return Promise.reject(e);
+    return Promise.reject(e.reason);
   }
 };
 
-const createNewDialogByUserId = async ({ author, partner, lastMessage }) => {
+const createNewDialogByUserId = async ({ author, partner }) => {
   try {
-    const id = uuidv4();
-    const dialogInstance = new Dialog({ id, author, partner, lastMessage });
-    const doc = await dialogInstance.save();
-    if (doc.id === id) {
-      return Promise.resolve(doc);
-    }
-    return Promise.reject(new Error('Creating new dialog was failed:('));
+    const doc = await new Dialog({ author, partner }).save();
+    return Promise.resolve(doc);
   } catch (e) {
-    return Promise.reject(new Error('Something went wrong'));
+    return Promise.reject(e);
   }
 };
 

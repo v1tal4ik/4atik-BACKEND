@@ -6,7 +6,9 @@ const dialogSchema = new Schema(
   {
     id: {
       type: String,
-      required: true,
+      default: function () {
+        return this._id;
+      },
     },
     author: {
       type: Schema.Types.ObjectId,
