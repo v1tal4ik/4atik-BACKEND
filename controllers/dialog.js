@@ -3,7 +3,8 @@ import messagesDB from '../models/Message/messagesDB';
 
 const fetchDialogsByUserId = async (req, res) => {
   try {
-    const data = await db.fetchDialogsByUserId({ authorId: req.query.id });
+    const { id } = req;
+    const data = await db.fetchDialogsByUserId({ authorId: id });
     res.status(200).json({ status: true, data });
   } catch (e) {
     res.status(404).json({ status: false, msg: e.message });

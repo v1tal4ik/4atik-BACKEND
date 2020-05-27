@@ -7,8 +7,8 @@ const router = express.Router();
 router.get('/', checkTokensFunc, user.getDataById);
 router.post('/register', user.createNewUser);
 router.post('/login', user.getDataByCredential);
-router.post('/password', user.changePassword);
+router.post('/password', checkTokensFunc, user.changePassword);
 
-router.post('user/secret', user.refreshTokens);
+router.post('/secret', user.refreshTokens);
 
 export default router;
