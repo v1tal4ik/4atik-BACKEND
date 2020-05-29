@@ -13,8 +13,13 @@ const fetchDialogsByUserId = async ({ authorId }) => {
 
 const createNewDialogByUserId = async ({ author, partner }) => {
   try {
-    const doc = await new Dialog({ author, partner }).save();
-    return Promise.resolve(doc);
+    const isAlreadyDefine = !(await Dialog.findOne({ author, partner }).id);
+    if (isAlreadyDefine) {
+      throw new Error('Dialog with this user was aleady created :(');
+    } else {
+      const doc = await new Dialog({ author, partner }).save();
+      return Promise.resolve(doc);
+    }
   } catch (e) {
     return Promise.reject(e);
   }
