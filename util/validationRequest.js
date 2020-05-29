@@ -5,7 +5,8 @@ export const checkTokensFunc = (req, res, next) => {
   const headersAuth = req.headers.authorization;
   const accessToken = headersAuth.split(' ')[1];
   try {
-    jwt.verify(accessToken, process.env.SECRET_WORD);
+    const { id } = jwt.verify(accessToken, process.env.SECRET_WORD);
+    req.id = id;
     next();
   } catch (e) {
     if (e.name === 'TokenExpiredError') {

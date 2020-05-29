@@ -1,5 +1,4 @@
 import crypto from 'crypto';
-import uuidv4 from 'uuid/v4';
 import Users from './usersSchema';
 
 const getUserById = async ({ id }) => {
@@ -26,12 +25,10 @@ const getUserByCredential = async ({ email, password }) => {
   }
 };
 
-const addNewUser = async ({ email, name, password }) => {
-  const id = uuidv4();
+const createNewUser = async ({ email, name, password }) => {
   const salt = crypto.randomBytes(16).toString('hex');
   const hash = crypto.pbkdf2Sync(password, salt, 1000, 512, 'sha512').toString('hex');
   const user = new Users({
-    id,
     email,
     name,
     password: hash,
@@ -40,12 +37,25 @@ const addNewUser = async ({ email, name, password }) => {
   });
   try {
     const doc = await user.save();
-    if (doc.email === email) {
-      return Promise.resolve({ status: true });
-    }
+    return Promise.resolve(doc);
   } catch (e) {
-    return Promise.reject(new Error(`Opps, the registration ${name} was failed :(`));
+    return Promise.reject(e);
   }
+};
+
+const changePassword = async ({ id, oldPassword, newPassword }) => {
+  const doc = await Users.findOne({ id });
+  const oldHash = crypto.pbkdf2Sync(oldPassword, doc.salt, 1000, 512, 'sha512').toString('hex');
+
+  if (doc.password === oldHash) {
+    const newHash = crypto.pbkdf2Sync(newPassword, doc.salt, 1000, 512, 'sha512').toString('hex');
+    const updatedUser = await Users.findOneAndUpdate({ id }, { password: newHash }, { new: true });
+    if (updatedUser.id === id) {
+      return Promise.resolve('Password has been change successfull:)');
+    }
+    return Promise.reject(new Error('Oops, something went wrong'));
+  }
+  return Promise.reject(new Error('Old password is wrong:('));
 };
 
 const setRefreshToken = async ({ id, refreshToken }) => {
@@ -60,6 +70,7 @@ const setRefreshToken = async ({ id, refreshToken }) => {
 export default {
   getUserById,
   getUserByCredential,
-  addNewUser,
+  createNewUser,
+  changePassword,
   setRefreshToken,
 };

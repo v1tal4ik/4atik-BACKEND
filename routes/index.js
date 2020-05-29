@@ -1,16 +1,16 @@
 import express from 'express';
+
 import { checkTokensFunc } from '../util/validationRequest';
-import user from '../controllers/user';
 
-const router = express.Router();
+import UserRouter from './user';
+import DialogRouter from './dialog';
+import MessagesRouter from './messages';
 
-router.post('/users/register', user.addNewUser);
-router.post('/users/login', user.getDataByCredential);
+const RootRouter = express.Router();
 
-router.post('/foo', checkTokensFunc, (req, res) => {
-  res.status(200).json();
-});
+RootRouter.use('/user', UserRouter);
 
-router.post('/secret', user.refreshTokens);
+RootRouter.use('/dialog', checkTokensFunc, DialogRouter);
+RootRouter.use('/messages', checkTokensFunc, MessagesRouter);
 
-export default router;
+export default RootRouter;

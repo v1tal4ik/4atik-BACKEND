@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import path from 'path';
-import Router from './routes';
+import RootRouter from './routes';
 import './models/index';
 
 const port = process.env.PORT || 3001;
@@ -14,7 +14,7 @@ app
   .use(cookieParser())
   .use(bodyParser.text())
   .use(bodyParser.json())
-  .use('/1.0', Router);
+  .use('/1.0', RootRouter);
 
 app.use((req, res) => {
   res.status(404).json({

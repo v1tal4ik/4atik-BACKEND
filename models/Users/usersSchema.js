@@ -6,8 +6,9 @@ const userSchema = new Schema(
   {
     id: {
       type: String,
-      required: [true, 'Input id'],
-      unique: true,
+      default: function () {
+        return this._id;
+      },
     },
     email: {
       type: String,
@@ -32,7 +33,7 @@ const userSchema = new Schema(
   },
   {
     versionKey: false,
-  },
+  }
 );
 
 const Users = mongoose.model('users', userSchema);
