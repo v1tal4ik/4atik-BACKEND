@@ -13,8 +13,8 @@ const fetchDialogsByUserId = async ({ authorId }) => {
 
 const createNewDialogByUserId = async ({ author, partner }) => {
   try {
-    const isAlreadyDefine = !(await Dialog.findOne({ author, partner }).id);
-    if (isAlreadyDefine) {
+    const instanceOfDialog = await Dialog.findOne({ author, partner });
+    if (instanceOfDialog) {
       throw new Error('Dialog with this user was aleady created :(');
     } else {
       const doc = await new Dialog({ author, partner }).save();
@@ -25,7 +25,19 @@ const createNewDialogByUserId = async ({ author, partner }) => {
   }
 };
 
+const deleteDialogById = async ({ id }) => {
+  try {
+    const doc = await Dialog.findOneAndDelete({ id });
+    if (!doc) {
+      throw new Error('Oops, that dialog not found :(');
+    }
+    return Promise.resolve();
+  } catch (e) {
+    return Promise.reject(e);
+  }
+};
 export default {
   fetchDialogsByUserId,
   createNewDialogByUserId,
+  deleteDialogById,
 };
