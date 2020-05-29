@@ -29,8 +29,9 @@ const createNewDialogByUserId = async (req, res) => {
 
 const deleteDialogById = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.query;
     await db.deleteDialogById({ id });
+    await messagesDB.deleteMessagesByDialogId({ id });
     res.status(200).json({ status: true });
   } catch (e) {
     res.status(404).json({ status: false, msg: e.message });

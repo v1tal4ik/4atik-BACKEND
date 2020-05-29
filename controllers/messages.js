@@ -21,7 +21,18 @@ const createMessageForDialog = async (req, res) => {
   }
 };
 
+const deleteMessageById = async (req, res) => {
+  try {
+    const { id } = req.query;
+    await db.deleteMessageById({ id });
+    res.status(200).json({ status: true });
+  } catch (e) {
+    res.status(400).json({ status: false, msg: e.message });
+  }
+};
+
 export default {
   fetchMessagesByDialogId,
   createMessageForDialog,
+  deleteMessageById,
 };
