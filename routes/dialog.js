@@ -5,5 +5,6 @@ const router = express.Router();
 
 router.get('/', dialog.fetchDialogsByUserId);
 router.post('/', dialog.createNewDialogByUserId);
+router.delete('/', dialog.deleteDialogById);
 
 export default router;

@@ -18,7 +18,33 @@ const createMessageForDialog = async ({ user, text, dialogId }) => {
   }
 };
 
+const deleteMessageById = async ({ id }) => {
+  try {
+    const doc = await Messages.findOneAndDelete({ id });
+    if (!doc) {
+      throw new Error('Oops, that message not found :(');
+    }
+    return Promise.resolve();
+  } catch (e) {
+    return Promise.reject(e);
+  }
+};
+
+const deleteMessagesByDialogId = async ({ id }) => {
+  try {
+    const doc = await Messages.deleteMany({ dialogId: id });
+    if (!doc) {
+      throw new Error('Oops, that messages not found :(');
+    }
+    return Promise.resolve();
+  } catch (e) {
+    return Promise.reject(e);
+  }
+};
+
 export default {
   fetchMessagesByDialogId,
   createMessageForDialog,
+  deleteMessageById,
+  deleteMessagesByDialogId,
 };
